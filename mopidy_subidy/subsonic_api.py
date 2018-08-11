@@ -95,6 +95,12 @@ class SubsonicApi():
 
     def find_as_search_result(self, query, exclude_artists=False, exclude_albums=False, exclude_songs=False):
         result = self.find_raw(query)
+        #Convert dir to albumid
+        for res in result:
+            if res('searchResult2')['album']['isDir']:
+                logger.info("Found a album dir")
+
+
         if result is None:
             return None
         return SearchResult(
