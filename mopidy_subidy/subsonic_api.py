@@ -256,10 +256,18 @@ class SubsonicApi():
             return sorted(albums, key=lambda album: string_nums_nocase_sort_key(album['name']))
         return []
 
+    def get_raw_dir_to_album_id(self, album_id):
+        resp = album_id
+        try:
+            resp = album_id = self.connection.getMusicDirectory(album_id)['directory']['child'][0]['albumId']
+        except Exception as e:
+            logger.warning("album_id: {} is not a directory returning original, good luck".format(album_id))
+            return album_id
+        return resp
+
     def get_raw_songs(self, album_id):
         try:
-            album_id = self.connection.getMusicDirectory(album_id)['directory']['child'][0]['albumId']
-            response = self.connection.getAlbum(album_id)
+            response = self.connection.getAlbum(get_raw_dir_to_album_id(album_id))
         except Exception as e:
             logger.warning('Connecting to subsonic failed when loading list of songs in album.')
             return []
