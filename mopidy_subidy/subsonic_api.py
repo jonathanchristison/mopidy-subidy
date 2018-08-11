@@ -264,7 +264,6 @@ class SubsonicApi():
 
     def get_raw_songs(self, album_id):
         try:
-            album_id = self.connection.getMusicDirectory(album_id)['directory']['child'][0]['albumId']
             response = self.connection.getAlbum(album_id)
         except Exception as e:
             logger.warning('Connecting to subsonic failed when loading list of songs in album.')
